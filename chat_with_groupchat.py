@@ -8,6 +8,7 @@ Original file is located at
 """
 
 import os
+from pathlib import Path
 from langchain.document_loaders import TextLoader
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import MarkdownTextSplitter
@@ -82,9 +83,9 @@ def process_llm_response(llm_response):
 
 embeddings = HuggingFaceEmbeddings(model_name="efederici/sentence-BERTino")
 
-persist_directory = "data/lorenzodb"
+persist_directory = Path("data/lorenzodb")
 # vectorstore = init_chromadb()
-vectorstore = Chroma(collection_name="langchain_store", persist_directory=persist_directory,
+vectorstore = Chroma(collection_name="langchain_store", persist_directory=str(persist_directory),
                      embedding_function=embeddings)
 
 qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(),
