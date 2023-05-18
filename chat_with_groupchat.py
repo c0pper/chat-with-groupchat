@@ -46,11 +46,11 @@ def init_chromadb():
 
     if os.path.exists(persist_directory) and os.path.isdir(persist_directory):
         print("Directory 'db' exists. Using existing vectordb")
-        pass
+    # pass
     else:
         print("Directory 'db' does not exist. Creating new vectordb")
-        vectorstore.add_documents(documents=docs, embedding=embeddings)
-        vectorstore.persist()
+    #     vectorstore.add_documents(documents=docs, embedding=embeddings)
+    #     vectorstore.persist()
     
     return vectorstore
 
@@ -77,23 +77,25 @@ def process_llm_response(llm_response):
     for source in llm_response["source_documents"]:
         print(source.page_content)
 
+    return wrap_text_preserve_newlines(llm_response['result'])
+
 
 embeddings = HuggingFaceEmbeddings(model_name="efederici/sentence-BERTino")
 
 persist_directory = "data\\lorenzodb"
 # vectorstore = init_chromadb()
-vectorstore = Chroma(collection_name="langchain_store", persist_directory=persist_directory, embedding_function=embeddings)
-# print(vectorstore._persist_directory)
-# print(vectorstore.similarity_search_with_score("Lorenzo valitutto"))
-# vectorstore.persist()
+vectorstore = Chroma(collection_name="langchain_store", persist_directory=persist_directory,
+                     embedding_function=embeddings)
 
-
-query = "cosa mi puoi dire su Bamba?"
-ans = query_chromadb(vectorstore, query)
 qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(),
                                   chain_type="stuff",
                                   retriever=vectorstore.as_retriever(),
                                   return_source_documents=True)
 
-llm_response = qa_chain(query)
-process_llm_response(llm_response)
+
+if __name__ == '__main__':
+    query = "cosa mi puoi dire su Bamba?"
+    ans = query_chromadb(vectorstore, query)
+
+    llm_response = qa_chain(query)
+    process_llm_response(llm_response)
