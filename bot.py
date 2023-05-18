@@ -12,7 +12,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def query(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f'Sto scrivendo...')
     reply = process_llm_response(qa_chain(update.message.text))
     print(reply)
     try:
@@ -24,6 +25,6 @@ async def hello(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 app = ApplicationBuilder().token("6079613795:AAGbtyLGslZxRCGQflcsOy-EaKaZcssbjQs").build()
 
-app.add_handler(CommandHandler("hello", hello))
+app.add_handler(CommandHandler("domanda", query))
 
 app.run_polling()
