@@ -82,7 +82,7 @@ def process_llm_response(llm_response):
 
 embeddings = HuggingFaceEmbeddings(model_name="efederici/sentence-BERTino")
 
-persist_directory = "data\\lorenzodb"
+persist_directory = "data/lorenzodb"
 # vectorstore = init_chromadb()
 vectorstore = Chroma(collection_name="langchain_store", persist_directory=persist_directory,
                      embedding_function=embeddings)
