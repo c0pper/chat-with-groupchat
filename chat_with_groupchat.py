@@ -90,7 +90,7 @@ vectorstore = Chroma(collection_name="langchain_store", persist_directory=str(pe
                      embedding_function=embeddings)
 
 
-prompt_template = """Usa i seguenti testi estratti da messaggi di Lorenzo Valitutto per rispondere alla domanda posta. Attieniti alle informazioni presenti nei messaggi.
+prompt_template = """Usa i seguenti testi estratti da messaggi di Lorenzo Valitutto per rispondere alla domanda posta. Attieniti strettamente alle informazioni presenti nei messaggi di seguito, non inventare risposte.
 
 {context}
 
