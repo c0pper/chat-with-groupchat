@@ -18,6 +18,7 @@ from langchain.vectorstores import Chroma
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 import textwrap
+from langchain.prompts import PromptTemplate
 
 
 # loader = TextLoader("/content/drive/MyDrive/data/all-messages.txt")
@@ -76,7 +77,7 @@ def process_llm_response(llm_response):
     print(wrap_text_preserve_newlines(llm_response['result']))
     print('\n\nSources:')
     for source in llm_response["source_documents"]:
-        print(source.page_content)
+        print(source.page_content, end="\n----\n")
 
     return wrap_text_preserve_newlines(llm_response['result'])
 
@@ -88,13 +89,34 @@ persist_directory = Path("data/lorenzodb")
 vectorstore = Chroma(collection_name="langchain_store", persist_directory=str(persist_directory),
                      embedding_function=embeddings)
 
+
+prompt_template = """Usa i seguenti testi estratti da messaggi di Lorenzo Valitutto per rispondere alla domanda posta. Attieniti alle informazioni presenti nei messaggi.
+
+{context}
+
+Domanda: {question}
+Risposta in italiano:"""
+PROMPT = PromptTemplate(
+    template=prompt_template, input_variables=["context", "question"]
+)
+
+chain_type_kwargs = {"prompt": PROMPT}
 qa_chain = RetrievalQA.from_chain_type(llm=OpenAI(),
                                   chain_type="stuff",
-                                  retriever=vectorstore.as_retriever(),
-                                  return_source_documents=True)
+                                  retriever=vectorstore.as_retriever(search_kwargs={"k": 10}),
+                                  return_source_documents=True,
+                                  chain_type_kwargs=chain_type_kwargs)
 
 
 if __name__ == '__main__':
+    # cosa sai sul principe della foresta?
+    # cosa mi puoi dire su Bamba?
+    # Lorenzo menziona spesso il personaggio di Agata. Cosa sappiamo su di lei?
+    # cosa sappiamo di Giacomo Orco?
+    # cosa sappiamo di Luigia manzella?
+    # cosa sappiamo di Rosanna Opromolla?
+    # cosa sai su Lucio Mandia ?
+    # cosa mi sai dire su originalcomic?
     query = "cosa mi puoi dire su Bamba?"
     ans = query_chromadb(vectorstore, query)
 

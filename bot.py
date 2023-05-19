@@ -1,4 +1,5 @@
 import logging
+import os
 from time import sleep
 import telegram.error
 from telegram import Update
@@ -23,7 +24,7 @@ async def query(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(f'{reply}')
 
 
-app = ApplicationBuilder().token("6079613795:AAGbtyLGslZxRCGQflcsOy-EaKaZcssbjQs").build()
+app = ApplicationBuilder().token(os.environ.get("BOT_TOKEN")).build()
 
 app.add_handler(CommandHandler("domanda", query))
 
