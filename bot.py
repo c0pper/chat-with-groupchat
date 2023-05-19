@@ -14,14 +14,25 @@ logger = logging.getLogger(__name__)
 
 
 async def query(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'Sto scrivendo...')
-    reply = process_llm_response(qa_chain(update.message.text))
-    print(reply)
-    try:
-        await update.message.reply_text(f'{reply}')
-    except telegram.error.NetworkError as e:
-        sleep(4)
-        await update.message.reply_text(f'{reply}')
+    command = "/domanda@Valipediabot"
+    text = update.message.text
+    index = text.find(command)
+    if len(text) > index + len(command):
+        await update.message.reply_text(f'Sto scrivendo...')
+        reply = process_llm_response(qa_chain(text))
+        print(reply)
+        print(update.message.text)
+        try:
+            await update.message.reply_text(f'{reply}')
+        except telegram.error.NetworkError as e:
+            sleep(4)
+            await update.message.reply_text(f'{reply}')
+    else:
+        try:
+            await update.message.reply_text(f'Scrivi una domanda per lo Spirito dopo il comando: "/domanda cosa sappiamo su Originalcomic?"')
+        except telegram.error.NetworkError as e:
+            sleep(4)
+            await update.message.reply_text(f'Scrivi una domanda per lo Spirito dopo il comando: "/domanda cosa sappiamo su Originalcomic?"')
 
 
 app = ApplicationBuilder().token(os.environ.get("BOT_TOKEN")).build()
