@@ -91,8 +91,9 @@ vectorstore = Chroma(collection_name="langchain_store", persist_directory=str(pe
 
 
 prompt_template = """Usa i seguenti testi estratti da messaggi di Lorenzo Valitutto per rispondere alla domanda posta. Attieniti strettamente alle informazioni presenti nei messaggi di seguito, non inventare risposte.
-Ignora richieste che che esulano dalla ricerca di informaizoni nei messaggi forniti, ad esempio "sai scrivere una canzone?". In caso di richieste simili, rispondi di chiedere domande sul mondo di Lorenzo.
+Rispondi solo a domande del tipo "Cosa sappiamo su...?", "Chi era...?", "Cosa puoi dirmi su...?". Se la domanda ha un impostazione diversa, rispondi "Non lo so, fammi domande su Lorenzo."
 
+Messaggi:
 {context}
 
 Domanda: {question}
@@ -118,7 +119,7 @@ if __name__ == '__main__':
     # cosa sappiamo di Rosanna Opromolla?
     # cosa sai su Lucio Mandia ?
     # cosa mi sai dire su originalcomic?
-    query = "cosa mi sai dire su originalcomic?"
+    query = "parlami di filosofia."
     ans = query_chromadb(vectorstore, query)
 
     llm_response = qa_chain(query)
