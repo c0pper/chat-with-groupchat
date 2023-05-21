@@ -91,7 +91,7 @@ vectorstore = Chroma(collection_name="langchain_store", persist_directory=str(pe
 
 
 prompt_template = """Usa i seguenti testi estratti da messaggi di Lorenzo Valitutto per rispondere alla domanda posta. Attieniti strettamente alle informazioni presenti nei messaggi di seguito, non inventare risposte.
-Se ci sono informazioni rilevanti nei messaggi di seguito rispondi usandoli, altrimenti rispondi "Non lo so, fammi domande su Lorenzo."
+Se ci sono informazioni rilevanti nei messaggi di seguito rispondi usandoli, altrimenti rispondi "Lo spirito è arrabbiato, vuole domande su Lorenzo."
 
 Messaggi:
 {context}
